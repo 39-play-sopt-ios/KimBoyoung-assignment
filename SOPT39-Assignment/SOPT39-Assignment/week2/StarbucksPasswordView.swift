@@ -130,7 +130,7 @@ struct StarbucksPasswordView: View {
                     
                     //네비게이션 버튼
                     NavigationLink {
-                        StarbucksWelcomeView()
+                        StarbucksWelcomeView(nickname: nickname)
                     } label: {
                         HStack(alignment: .center, spacing: 0) {
                             Text("가입하기")
