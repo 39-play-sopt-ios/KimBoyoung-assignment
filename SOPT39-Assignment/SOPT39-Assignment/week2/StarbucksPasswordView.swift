@@ -15,14 +15,14 @@ struct StarbucksPasswordView: View {
     @State private var isPasswordVisible = false
     @State private var isNicknameSheetPresented = false
     
-    private var isSignUpEnabled: Bool {
-        isPasswordValid &&
-        !nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-    
     //정규식씨
     private var isPasswordValid: Bool {
         password.wholeMatch(of: /(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{10,}/) != nil
+    }
+
+    private var isSignUpEnabled: Bool {
+        isPasswordValid &&
+        !nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
     var body: some View {
@@ -110,27 +110,41 @@ struct StarbucksPasswordView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 30)
                     .padding(.top, 13)
+
+                    Button {
+                        isNicknameSheetPresented = true
+                    } label: {
+                        Text(nickname.isEmpty ? "닉네임 설정" : nickname)
+                            .font(.custom("Pretendard-Regular", size: 12))
+                            .foregroundColor(
+                                nickname.isEmpty
+                                ? Color(.starbucksGray300): Color(.starbucksGray100)
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 40)
                     
                     
                     Spacer()
                     
                     //네비게이션 버튼
                     NavigationLink {
-                        StarbucksPasswordView(email: email)
+                        StarbucksWelcomeView()
                     } label: {
                         HStack(alignment: .center, spacing: 0) {
                             Text("가입하기")
                                 .font(.custom("Pretendard", size: 18)
                                     .weight(.medium)
                                 )
-                                .foregroundColor(isPasswordValid ? .white : Color( .starbucksGray300))
+                                .foregroundColor(isSignUpEnabled ? .white : Color( .starbucksGray300))
                         }
                         .padding(.horizontal, 22)
                         .frame(width: 331, height: 56, alignment: .center)
-                        .background(isPasswordValid ? Color(.starbucksGreen) : Color(.starbucksGray200))
+                        .background(isSignUpEnabled ? Color(.starbucksGreen) : Color(.starbucksGray200))
                         .cornerRadius(10)
                     }
-                    .disabled(!isPasswordValid)
+                    .disabled(!isSignUpEnabled)
                     .buttonStyle(.plain)
                     .padding(.bottom, 47)
                     
@@ -140,6 +154,72 @@ struct StarbucksPasswordView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity,
                    alignment: .topLeading)
             .background(Color(.starbucksBgWhite).ignoresSafeArea())
+        }
+        .overlay(alignment: .bottom) {
+            if isNicknameSheetPresented {
+                VStack(alignment: .leading, spacing: 0) {
+                    Capsule()
+                        .fill(.white.opacity(0.08))
+                        .frame(width: 35, height: 5)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 5)
+
+                    Text("닉네임을 입력해주세요")
+                        .font(.custom("Pretendard-SemiBold", size: 18))
+                        .foregroundColor(.white)
+                        .padding(.leading, 22)
+                        .padding(.top, 32)
+
+                    TextField("닉네임 입력", text: $nickname)
+                        .font(.custom("Pretendard-Regular", size: 12))
+                        .foregroundColor(.black)
+                        .padding(.horizontal, 15)
+                        .frame(height: 47)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding(.horizontal, 29)
+                        .padding(.top, 19)
+
+                    Spacer()
+                    
+                    //완료 버튼
+                    Button {
+                        isNicknameSheetPresented = false
+                    } label: {
+                        Text("완료")
+                            .font(.custom("Pretendard-Medium", size: 18))
+                            .foregroundColor(.starbucksGreen)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                            .background(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 47)
+                    .disabled(
+                        nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    )
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: UIScreen.main.bounds.height * 0.5)
+                .background(Color(.starbucksDarkgreen))
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 12,
+                        topTrailingRadius: 12
+                    )
+                )
+                .ignoresSafeArea(edges: .bottom)
+                .transition(.move(edge: .bottom))
+                .gesture(
+                    DragGesture().onEnded { value in
+                        if value.translation.height > 50 {
+                            isNicknameSheetPresented = false
+                        }
+                    }
+                )
+            }
         }
     }
 }
