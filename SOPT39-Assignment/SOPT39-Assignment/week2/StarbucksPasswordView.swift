@@ -15,7 +15,6 @@ struct StarbucksPasswordView: View {
     @State private var isPasswordVisible = false
     @State private var isNicknameSheetPresented = false
     
-    //정규식씨
     private var isPasswordValid: Bool {
         password.wholeMatch(of: /(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{10,}/) != nil
     }
@@ -62,7 +61,7 @@ struct StarbucksPasswordView: View {
                                 prompt: Text("비밀번호 입력")
                                     .font(.custom("Pretendard-Regular", size: 12))
                             )
-                            .font(.system(size: 18, weight: .semibold))//일단 킵
+                            .font(.system(size: 18, weight: .semibold))
                         }
                         
                         if !password.isEmpty {
