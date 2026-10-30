@@ -50,7 +50,7 @@ struct NewMenuView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(viewModel.newDrinks) { drink in
                         NavigationLink {
-                            Text(drink.name)
+                            DrinkDetailView(drink: drink)
                         } label: {
                             DrinkModelView(drink: drink)
                         }
