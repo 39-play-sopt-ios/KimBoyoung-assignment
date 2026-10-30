@@ -14,21 +14,22 @@ struct DrinkModelView: View {
         HStack(alignment: .center, spacing: 12) {
             Image(drink.imageName)
                 .resizable()
-                .frame(width: 68, height: 68)
+                .frame(width: 100, height: 100)
                 .clipShape(.circle)
 
             VStack(alignment: .leading, spacing: 10) {
-                Text(drink.name)
-                    .font(.body1)
-                    .foregroundColor(.black)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(drink.name)
+                        .font(.orderMenu)
+                        .foregroundColor(.black)
 
-                Text(drink.englishName)
-                    .font(.body2)
-                    .foregroundColor(.starbucksGray300)
-                    .lineLimit(1)
+                    Text(drink.englishName)
+                        .font(.cap2)
+                        .foregroundColor(.starbucksGray300)
+                }
 
                 Text(drink.price)
-                    .font(.body1)
+                    .font(.orderMenu)
                     .foregroundColor(.black)
             }
         }
